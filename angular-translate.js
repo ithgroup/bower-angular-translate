@@ -2654,7 +2654,16 @@ function translateDirective($translate, $q, $interpolate, $compile, $parse, $roo
       var translateInterpolation = (tAttr.translateInterpolation) ?
         tAttr.translateInterpolation : undefined;
 
-      var translateValueExist = tElement[0].outerHTML.match(/translate-value-+/i);
+      var translateValueExist = angular.isDefined(tElement[0].outerHTML)? tElement[0].outerHTML.match(/translate-value-+/i) : -1;
+
+      if (translateValueExist === -1) {
+        for(var _a in tAttr.$attr) {
+          if (_a.match(/translateValue([A-Z]+)/)) {
+            translateValueExist = true;
+            break;
+          }
+        }
+      }
 
       var interpolateRegExp = '^(.*)(' + $interpolate.startSymbol() + '.*' + $interpolate.endSymbol() + ')(.*)',
           watcherRegExp = '^(.*)' + $interpolate.startSymbol() + '(.*)' + $interpolate.endSymbol() + '(.*)';
